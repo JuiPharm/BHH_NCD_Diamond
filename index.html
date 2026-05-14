@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>บันทึกข้อมูลตำแหน่ง</title>
+  <title>BDMS Location Consent</title>
 
   <style>
     * {
@@ -15,7 +15,10 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+      background:
+        radial-gradient(circle at top right, rgba(220, 38, 38, 0.25), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.22), transparent 35%),
+        linear-gradient(135deg, #0f172a, #1e3a8a, #dc2626);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -25,31 +28,80 @@
     .card {
       width: 100%;
       max-width: 460px;
-      background: white;
-      border-radius: 24px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
-      padding: 28px;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 30px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      padding: 32px;
       text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 7px;
+      background: linear-gradient(
+        90deg,
+        #dc2626 0%,
+        #ffffff 50%,
+        #2563eb 100%
+      );
+    }
+
+    .logo-wrap {
+      width: 136px;
+      height: 136px;
+      margin: 0 auto 16px;
+      border-radius: 32px;
+      background:
+        linear-gradient(145deg, #ffffff, #f8fafc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 12px 30px rgba(37, 99, 235, 0.12),
+        inset 0 0 0 1px rgba(37, 99, 235, 0.08);
+      position: relative;
+    }
+
+    .logo-wrap::after {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 32px;
+      padding: 2px;
+      background: linear-gradient(135deg, #dc2626, #2563eb);
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
     }
 
     .logo {
-      width: 110px;
-      height: 110px;
+      width: 106px;
+      height: 106px;
       object-fit: contain;
-      margin-bottom: 12px;
-      border-radius: 20px;
+      z-index: 2;
     }
 
     h1 {
-      margin: 8px 0 6px;
-      font-size: 24px;
-      color: #1b5e20;
+      margin: 8px 0 8px;
+      font-size: 26px;
+      color: #0f172a;
+      font-weight: 700;
     }
 
     p {
-      color: #555;
+      color: #475569;
       font-size: 15px;
-      line-height: 1.6;
+      line-height: 1.7;
+      margin-bottom: 18px;
     }
 
     label {
@@ -57,63 +109,97 @@
       text-align: left;
       margin-top: 16px;
       font-weight: bold;
-      color: #333;
+      color: #0f172a;
     }
 
     input[type="text"] {
       width: 100%;
-      padding: 13px 14px;
+      padding: 14px;
       margin-top: 7px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 15px;
       font-size: 16px;
+      outline: none;
+      background: #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
     }
 
     .choice {
       margin-top: 12px;
       text-align: left;
-      background: #f7f9fb;
-      padding: 12px;
-      border-radius: 12px;
+      background:
+        linear-gradient(145deg, #ffffff, #f8fafc);
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid #dbeafe;
     }
 
     .choice label {
-      margin: 8px 0;
+      margin: 10px 0;
       font-weight: normal;
       display: flex;
       gap: 10px;
       align-items: center;
+      color: #1e293b;
     }
 
-    .hint {
+    input[type="radio"] {
+      accent-color: #dc2626;
+      transform: scale(1.15);
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 16px;
+      background:
+        linear-gradient(145deg, #eff6ff, #ffffff);
+      color: #1e3a8a;
       font-size: 13px;
-      color: #666;
-      margin-top: 8px;
+      line-height: 1.6;
       text-align: left;
+      border-left: 5px solid #dc2626;
     }
 
     button {
       width: 100%;
-      margin-top: 22px;
-      padding: 14px;
+      margin-top: 24px;
+      padding: 15px;
       border: none;
-      border-radius: 14px;
-      background: #2e7d32;
+      border-radius: 18px;
+      background:
+        linear-gradient(135deg, #dc2626, #2563eb);
       color: white;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
+      box-shadow:
+        0 14px 28px rgba(37, 99, 235, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 18px 32px rgba(37, 99, 235, 0.32);
     }
 
     button:disabled {
-      background: #9e9e9e;
+      background: #94a3b8;
       cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
     }
 
     .status {
       margin-top: 16px;
-      padding: 12px;
-      border-radius: 12px;
+      padding: 13px;
+      border-radius: 15px;
       display: none;
       font-size: 14px;
       line-height: 1.5;
@@ -121,132 +207,207 @@
 
     .success {
       display: block;
-      background: #e8f5e9;
-      color: #1b5e20;
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
     }
 
     .error {
       display: block;
-      background: #ffebee;
-      color: #b71c1c;
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
     }
 
     .loading {
       display: block;
-      background: #fff8e1;
-      color: #795548;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px;
+        border-radius: 24px;
+      }
+
+      h1 {
+        font-size: 23px;
+      }
+
+      .logo-wrap {
+        width: 120px;
+        height: 120px;
+      }
+
+      .logo {
+        width: 92px;
+        height: 92px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <img
-      class="logo"
-      src="https://lh3.googleusercontent.com/d/1r7PM1ogHIbxskvcauVIYaQOfSHXWGncO=w240"
-      alt="Logo"
-    />
 
-    <h1>บันทึกข้อมูลตำแหน่ง</h1>
-    <p>กรุณากรอกข้อมูลและเลือกความยินยอมก่อนส่งข้อมูล</p>
+  <div class="card">
+
+    <div class="logo-wrap">
+      <img
+        class="logo"
+        src="https://lh3.googleusercontent.com/d/1r7PM1ogHIbxskvcauVIYaQOfSHXWGncO=w240"
+        alt="Logo"
+      />
+    </div>
+
+    <h1>Location Consent</h1>
+
+    <p>
+      กรุณากรอกข้อมูลและให้ความยินยอมในการบันทึกตำแหน่ง GPS
+      เพื่อใช้สำหรับการยืนยันตำแหน่งตามวัตถุประสงค์ขององค์กร
+    </p>
 
     <form id="locationForm">
+
       <label>ชื่อ</label>
-      <input type="text" id="firstName" required placeholder="กรอกชื่อ" />
+      <input
+        type="text"
+        id="firstName"
+        placeholder="กรอกชื่อ"
+        required
+      />
 
       <label>นามสกุล</label>
-      <input type="text" id="lastName" required placeholder="กรอกนามสกุล" />
+      <input
+        type="text"
+        id="lastName"
+        placeholder="กรอกนามสกุล"
+        required
+      />
 
       <label>ความยินยอม</label>
+
       <div class="choice">
+
         <label>
-          <input type="radio" name="consent" value="ยินยอม" required />
-          ยินยอมให้บันทึกตำแหน่ง
+          <input
+            type="radio"
+            name="consent"
+            value="ยินยอม"
+            required
+          />
+          ยินยอมให้บันทึกตำแหน่ง GPS
         </label>
 
         <label>
-          <input type="radio" name="consent" value="ไม่ยินยอม" required />
-          ไม่ยินยอมให้บันทึกตำแหน่ง
+          <input
+            type="radio"
+            name="consent"
+            value="ไม่ยินยอม"
+            required
+          />
+          ไม่ยินยอมให้บันทึกตำแหน่ง GPS
         </label>
+
       </div>
 
-      <label>ระดับความแม่นยำ</label>
-      <div class="choice">
-        <label>
-          <input type="radio" name="accuracyMode" value="เร็ว" checked />
-          เร็วขึ้น เหมาะกับการใช้งานทั่วไป
-        </label>
-
-        <label>
-          <input type="radio" name="accuracyMode" value="แม่นยำสูง" />
-          แม่นยำสูง ใช้ GPS ละเอียดขึ้น แต่อาจใช้เวลานานกว่า
-        </label>
+      <div class="notice">
+        ระบบจะใช้ GPS แบบแม่นยำสูง (High Accuracy)
+        เพื่อให้ได้ตำแหน่งที่ละเอียดที่สุดเท่าที่อุปกรณ์รองรับ
       </div>
 
-      <div class="hint">
-        แนะนำ: หากอยู่กลางแจ้งและเปิด GPS จะได้ตำแหน่งแม่นยำกว่า
-      </div>
+      <button type="submit" id="submitBtn">
+        ส่งข้อมูล
+      </button>
 
-      <button type="submit" id="submitBtn">ส่งข้อมูล</button>
       <div id="status" class="status"></div>
+
     </form>
+
   </div>
 
   <script>
+
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyOi97FkTX8EQ-riUkm3rCL0jET2P6iJWyntOcmP1ACOavxUM5LFMz8PH_D2Ctkc4RV8g/exec';
 
     const form = document.getElementById('locationForm');
     const statusBox = document.getElementById('status');
     const submitBtn = document.getElementById('submitBtn');
 
-    form.addEventListener('submit', async function (event) {
+    form.addEventListener('submit', async function(event) {
+
       event.preventDefault();
 
       clearStatus();
+
       submitBtn.disabled = true;
 
       const firstName = document.getElementById('firstName').value.trim();
       const lastName = document.getElementById('lastName').value.trim();
-      const consent = document.querySelector('input[name="consent"]:checked')?.value;
-      const accuracyMode = document.querySelector('input[name="accuracyMode"]:checked')?.value;
+
+      const consent =
+        document.querySelector('input[name="consent"]:checked')?.value;
 
       if (!firstName || !lastName || !consent) {
-        showStatus('กรุณากรอกข้อมูลให้ครบถ้วน', 'error');
+
+        showStatus(
+          'กรุณากรอกข้อมูลให้ครบถ้วน',
+          'error'
+        );
+
         resetButton();
         return;
       }
 
       if (consent === 'ไม่ยินยอม') {
+
         submitBtn.textContent = 'กำลังบันทึก...';
 
         await submitToGoogleSheet({
           firstName,
           lastName,
           consent,
-          accuracyMode: '',
           latitude: '',
           longitude: '',
           accuracy: ''
         });
 
-        showStatus('บันทึกข้อมูลเรียบร้อย: ผู้ใช้ไม่ยินยอมให้บันทึกตำแหน่ง', 'success');
+        showStatus(
+          'บันทึกข้อมูลเรียบร้อย',
+          'success'
+        );
+
         form.reset();
+
         resetButton();
+
         return;
       }
 
       if (!navigator.geolocation) {
-        showStatus('อุปกรณ์นี้ไม่รองรับการระบุตำแหน่ง', 'error');
+
+        showStatus(
+          'อุปกรณ์นี้ไม่รองรับ GPS',
+          'error'
+        );
+
         resetButton();
+
         return;
       }
 
+      showStatus(
+        'กำลังค้นหาตำแหน่ง GPS...',
+        'loading'
+      );
+
       submitBtn.textContent = 'กำลังค้นหาตำแหน่ง...';
 
-      const geoOptions = getGeoOptions(accuracyMode);
-
       navigator.geolocation.getCurrentPosition(
-        async function (position) {
+
+        async function(position) {
+
           submitBtn.textContent = 'กำลังบันทึก...';
 
           const latitude = position.coords.latitude;
@@ -257,61 +418,59 @@
             firstName,
             lastName,
             consent,
-            accuracyMode,
             latitude,
             longitude,
             accuracy
           });
 
           showStatus(
-            `บันทึกข้อมูลตำแหน่งเรียบร้อย ความคลาดเคลื่อนประมาณ ${Math.round(accuracy)} เมตร`,
+            `บันทึกข้อมูลเรียบร้อย (Accuracy ~ ${Math.round(accuracy)} เมตร)`,
             'success'
           );
 
           form.reset();
+
           resetButton();
         },
-        async function (error) {
+
+        function(error) {
+
           let message = 'ไม่สามารถดึงตำแหน่งได้';
 
           if (error.code === error.PERMISSION_DENIED) {
             message = 'ผู้ใช้ไม่อนุญาตให้เข้าถึงตำแหน่ง';
-          } else if (error.code === error.TIMEOUT) {
-            message = 'ค้นหาตำแหน่งไม่ทันเวลา กรุณาลองอีกครั้ง หรือเลือกโหมดเร็ว';
-          } else if (error.code === error.POSITION_UNAVAILABLE) {
-            message = 'ไม่พบสัญญาณตำแหน่ง กรุณาเปิด GPS หรือย้ายไปพื้นที่โล่ง';
+          }
+
+          else if (error.code === error.TIMEOUT) {
+            message = 'ค้นหาตำแหน่งไม่ทันเวลา กรุณาลองใหม่';
+          }
+
+          else if (error.code === error.POSITION_UNAVAILABLE) {
+            message = 'ไม่พบสัญญาณ GPS';
           }
 
           showStatus(message, 'error');
+
           resetButton();
         },
-        geoOptions
+
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0
+        }
+
       );
+
     });
 
-    function getGeoOptions(mode) {
-      if (mode === 'แม่นยำสูง') {
-        return {
-          enableHighAccuracy: true,
-          timeout: 12000,
-          maximumAge: 0
-        };
-      }
-
-      return {
-        enableHighAccuracy: false,
-        timeout: 5000,
-        maximumAge: 60000
-      };
-    }
-
     async function submitToGoogleSheet(data) {
+
       const formData = new URLSearchParams();
 
       formData.append('firstName', data.firstName);
       formData.append('lastName', data.lastName);
       formData.append('consent', data.consent);
-      formData.append('accuracyMode', data.accuracyMode);
       formData.append('latitude', data.latitude);
       formData.append('longitude', data.longitude);
       formData.append('accuracy', data.accuracy);
@@ -325,22 +484,28 @@
         },
         body: formData.toString()
       });
+
     }
 
     function showStatus(message, type) {
+
       statusBox.textContent = message;
       statusBox.className = `status ${type}`;
     }
 
     function clearStatus() {
+
       statusBox.textContent = '';
       statusBox.className = 'status';
     }
 
     function resetButton() {
+
       submitBtn.disabled = false;
       submitBtn.textContent = 'ส่งข้อมูล';
     }
+
   </script>
+
 </body>
 </html>
